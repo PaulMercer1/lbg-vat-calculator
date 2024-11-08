@@ -39,8 +39,8 @@ pipeline{
       when {
         gitTag != null
       }
-      script {
-        steps {
+      steps {
+        script {
           docker.withRegistry('', registryCredentials) {
             dockerImage.push("${gitTag}")
           }
