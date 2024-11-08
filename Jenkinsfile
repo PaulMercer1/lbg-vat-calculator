@@ -1,46 +1,57 @@
 pipeline{
- environment {
- registry = "paulmercer/vatcal"
- registryCredentials = "dockerhub_id"
- dockerImage = ""
- gitTag = ""
- }
-    agent any
-        stages {
-           stage('Env vars'){
-             steps {
-               script {
-                 gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
-                 echo "Building ${gitTag}"
-               }
-            }
-           }
-            stage ('Build Docker Image'){
-                steps{
-                    script {
-                        dockerImage = docker.build(registry)
-                    }
-                }
-            }
-
-            stage ("Push to Docker Hub"){
-                steps {
-                    script {
-                        docker.withRegistry('', registryCredentials) {
-                            dockerImage.push("${env.BUILD_NUMBER}")
-                            dockerImage.push("${gitTag}")
-                            dockerImage.push("latest")
-                        }
-                    }
-                }
-            }
-
-            stage ("Clean up"){
-                steps {
-                    script {
-                        sh 'docker image prune --all --force --filter "until=48h"'
-                           }
-                }
-            }
+  environment {
+  registry = "paulmercer/vatcal"
+  registryCredentials = "dockerhub_id"
+  dockerImage = ""
+  gitTag = ""
+  }
+  
+  agent any
+  stages {
+    stage('Env vars'){
+      steps {
+        script {
+          gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+          echo "Building ${gitTag}"
         }
+      }
+    }
+    stage ('Build Docker Image'){
+      steps{
+        script {
+          dockerImage = docker.build(registry)
+        }
+      }
+    }
+
+    stage ("Push to Docker Hub"){
+      steps {
+        script {
+          docker.withRegistry('', registryCredentials) {
+            dockerImage.push("${env.BUILD_NUMBER}")
+            dockerImage.push("latest")
+          }
+        }
+      }
+    }
+
+    stage("Push tagged version"){
+      when {
+        gitTag != null
+      }
+      steps {
+        docker.withRegistry('', registryCredentials) {
+          dockerImage.push("${gitTag}")
+        }
+      }
+    }
+
+    stage ("Clean up"){
+      steps {
+        script {
+          sh 'docker image prune --all --force --filter "until=48h"'
+        }
+      }
+    }
+  }
 }
