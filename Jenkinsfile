@@ -11,8 +11,7 @@ pipeline{
     stage('Env vars'){
       steps {
         script {
-          gitTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
-          env.gitTag = gitTag
+          gitTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()          
           echo "env.gitTag is ${env.gitTag} and gitTag is ${gitTag}"
         }
       }
@@ -38,7 +37,7 @@ pipeline{
 
     stage("Push tagged version"){
       when {
-        expression { return env.gitTag != null }
+        expression { return gitTag != null }
       }
       steps {
         script {
