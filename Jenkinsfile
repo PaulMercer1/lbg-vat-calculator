@@ -11,7 +11,7 @@ pipeline{
     stage('Env vars'){
       steps {
         script {
-          gitTag = sh(returnStdout: true, script: "git describe --tags --exact-match || echo ''").trim()
+          gitTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
           env.gitTag = gitTag
           echo env.gitTag
         }
