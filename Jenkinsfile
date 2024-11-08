@@ -11,7 +11,7 @@ pipeline{
     stage('Env vars'){
       steps {
         script {
-          gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+          env.gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
           echo "Building ${gitTag}"
         }
       }
@@ -37,7 +37,7 @@ pipeline{
 
     stage("Push tagged version"){
       when {
-        expression { return env.gitTag != null && env.gitTag != '' }
+        expression { return env.gitTag != null }
       }
       steps {
         script {
