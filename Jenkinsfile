@@ -13,7 +13,7 @@ pipeline{
         script {
           gitTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
           env.gitTag = gitTag
-          echo env.gitTag
+          echo "env.gitTag is ${env.gitTag} and gitTag is ${gitTag}"
         }
       }
     }
