@@ -11,8 +11,8 @@ pipeline{
     stage('Env vars'){
       steps {
         script {
-          env.gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
-          echo "Building ${gitTag}"
+          gitTag = sh(returnStdout: true, script: "git describe --tags --exact-match || echo ''").trim()
+          env.gitTag = gitTag
         }
       }
     }
