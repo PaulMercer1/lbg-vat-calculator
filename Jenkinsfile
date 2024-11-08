@@ -39,13 +39,14 @@ pipeline{
       when {
         gitTag != null
       }
-      steps {
-        docker.withRegistry('', registryCredentials) {
-          dockerImage.push("${gitTag}")
+      script {
+        steps {
+          docker.withRegistry('', registryCredentials) {
+            dockerImage.push("${gitTag}")
+          }
         }
       }
     }
-
     stage ("Clean up"){
       steps {
         script {
