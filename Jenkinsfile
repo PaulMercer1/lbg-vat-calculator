@@ -37,7 +37,7 @@ pipeline{
 
     stage("Push tagged version"){
       when {
-        gitTag != null
+        expression { return env.gitTag != null && env.gitTag != '' }
       }
       steps {
         script {
