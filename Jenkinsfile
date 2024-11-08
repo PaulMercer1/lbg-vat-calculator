@@ -19,6 +19,7 @@ pipeline{
                     script {
                         docker.withRegistry('', registryCredentials) {
                             dockerImage.push("${env.BUILD_NUMBER}")
+                            dockerImage.push("${env.TAG_NAME}")
                             dockerImage.push("latest")
                         }
                     }
