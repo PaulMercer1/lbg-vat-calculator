@@ -13,6 +13,7 @@ pipeline{
         script {
           gitTag = sh(returnStdout: true, script: "git describe --tags --exact-match || echo ''").trim()
           env.gitTag = gitTag
+          echo env.gitTag
         }
       }
     }
