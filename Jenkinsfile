@@ -3,18 +3,18 @@ pipeline{
  registry = "paulmercer/vatcal"
  registryCredentials = "dockerhub_id"
  dockerImage = ""
- gitTag
+ gitTag = ""
  }
     agent any
         stages {
            stage('Env vars'){
-steps {
-  script {
-          gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
-          echo "Building ${gitTag}"
-        }
+             steps {
+               script {
+                 gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+                 echo "Building ${gitTag}"
+               }
+            }
            }
-         
             stage ('Build Docker Image'){
                 steps{
                     script {
