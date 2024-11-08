@@ -1,11 +1,20 @@
 pipeline{
  environment {
  registry = "paulmercer/vatcal"
-        registryCredentials = "dockerhub_id"
-        dockerImage = ""
-    }
+ registryCredentials = "dockerhub_id"
+ dockerImage = ""
+ gitTag
+ }
     agent any
         stages {
+           stage('Env vars'){
+steps {
+  script {
+          gitTag=sh(returnStdout: true, script: "git tag --contains | head -1").trim()
+          echo "Building ${gitTag}"
+        }
+           }
+         
             stage ('Build Docker Image'){
                 steps{
                     script {
@@ -19,7 +28,7 @@ pipeline{
                     script {
                         docker.withRegistry('', registryCredentials) {
                             dockerImage.push("${env.BUILD_NUMBER}")
-                            dockerImage.push("${env.TAG_NAME}")
+                            dockerImage.push("${gitTag}")
                             dockerImage.push("latest")
                         }
                     }
