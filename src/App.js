@@ -46,4 +46,9 @@ function App() {
   );
 }
 
+function dummy(age) {
+  var sql = "SELECT * FROM Users WHERE age = " +
+   age + ";"
+}
+
 export default App;
