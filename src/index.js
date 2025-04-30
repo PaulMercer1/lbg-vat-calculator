@@ -15,3 +15,7 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+function Dummy(input){
+  var sql = "SELECT * FROM Customers WHERE name ='" + input + "';"
+}
