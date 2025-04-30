@@ -16,6 +16,5 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-function Dummy(input){
-  var sql = "SELECT * FROM Customers WHERE name ='" + input + "';"
-}
+
+
